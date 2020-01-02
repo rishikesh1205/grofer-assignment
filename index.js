@@ -18,6 +18,6 @@ app.put('/update-product/:id' , Controller.updateProduct )
 app.delete('/delete-product/:id' , Controller.deleteProduct )
 app.get('/search-products', Controller.searchDB)
 
-app.listen("8030" , () => {
+app.listen(process.env.PORT || "8030" , () => {
     console.log("App started at 8030...")
 })
