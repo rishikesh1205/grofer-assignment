@@ -50,7 +50,14 @@ const sanitizer = require('sanitizer')
               else 
                 res.status(200).json({ message: Products });
             });
-        } else res.status(400).json({ message: "No id given" });
+        } else {
+          Product.find()
+                .exec()
+                .then(results => {
+                  res.status(200).json({ message: results });
+                 }).catch(err=> {
+                  res.status(400).json({ message: err });  
+        }
       },
       updateProduct : (req , res) => {
         if(req.body && req.params.id){
@@ -98,7 +105,7 @@ const sanitizer = require('sanitizer')
            Object.assign(queryObj,
               req.query.name && {name :{ $regex: '.*' + req.query.name + '.*' , $options: 'i'}},
               req.query.brand_name && {brand_name :{ $regex: '.*' + req.query.brand_name + '.*' , $options: 'i'}},
-              req.query.category && {category :{ $regex: '.*' + req.query.category + '.*' , $options: 'i'}},
+              req.query.category && {categories :{ $regex: '.*' + req.query.category + '.*' , $options: 'i'}},
            );
           Product.find(queryObj)
                 .exec()
@@ -109,7 +116,6 @@ const sanitizer = require('sanitizer')
          }
          else  res.status(400).json({ message: "Please enter valid filter" });
       }
-      else res.status(400).json({ message: "No search filters" });
 
     }
 
