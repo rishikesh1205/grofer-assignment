@@ -57,6 +57,7 @@ const sanitizer = require('sanitizer')
                   res.status(200).json({ message: results });
                  }).catch(err=> {
                   res.status(400).json({ message: err });  
+        });
         }
       },
       updateProduct : (req , res) => {
@@ -113,10 +114,12 @@ const sanitizer = require('sanitizer')
                   res.status(200).json({ message: results });
                  }).catch(err=> {
                   res.status(400).json({ message: err });   
-         }
-         else  res.status(400).json({ message: "Please enter valid filter" });
+         });
       }
-
+      else  res.status(400).json({ message: "Please enter valid filter" });
     }
+    else  res.status(400).json({ message: "No filter selected" });
 
  }
+
+}
