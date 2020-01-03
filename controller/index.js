@@ -92,29 +92,24 @@ const sanitizer = require('sanitizer')
     
     },
     searchDB : (req , res) => {
-      if(req.query.q){
-          let searchTerm = req.query.q;
-          Product.find({name: { $regex: '.*' + searchTerm + '.*' , $options: 'i'} })
-          .exec()
-          .then(names => {
-              Product.find({brand_name: { $regex: '.*' + searchTerm + '.*' , $options: 'i'} })
-              .exec()
-              .then(brands => {
-                Product.find({categories: { $regex: '.*' + searchTerm + '.*' , $options: 'i'} })
+      if(req.query){
+         if(req.query.name || req.query.brand_name || req.query.category){
+           let queryObj = {}
+           Object.assign(queryObj,
+              req.query.name && {name :{ $regex: '.*' + req.query.name + '.*' , $options: 'i'}},
+              req.query.brand_name && {brand_name :{ $regex: '.*' + req.query.brand_name + '.*' , $options: 'i'}},
+              req.query.category && {category :{ $regex: '.*' + req.query.category + '.*' , $options: 'i'}},
+           );
+          Product.find(queryObj)
                 .exec()
-                .then(categories => {
-                  res.status(200).json({ message: [{names}, {brands}, {categories}] });
+                .then(results => {
+                  res.status(200).json({ message: results });
                  }).catch(err=> {
                   res.status(400).json({ message: err });   
-           })
-               }).catch(err=> {
-                 res.status(400).json({ message: err });   
-              })
-          }).catch(err=> {
-                  res.status(400).json({ message: err });   
-           })
+         }
+         else  res.status(400).json({ message: "Please enter valid filter" });
       }
-      else res.status(400).json({ message: "No Search Term" });
+      else res.status(400).json({ message: "No search filters" });
 
     }
 
