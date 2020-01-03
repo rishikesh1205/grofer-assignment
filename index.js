@@ -13,6 +13,7 @@ app.get('/',(req,res) => {
     res.status(200).json({'message': 'App initialized'});
 })
 app.get('/get-product/' , Controller.getProductByID )
+app.get('/get-product/:id' , Controller.getProductByID )
 app.post('/create-product', Controller.createProduct)
 app.put('/update-product/:id' , Controller.updateProduct )
 app.delete('/delete-product/:id' , Controller.deleteProduct )
